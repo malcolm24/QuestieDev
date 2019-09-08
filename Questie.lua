@@ -1,6 +1,6 @@
-
 Questie = LibStub("AceAddon-3.0"):NewAddon("Questie", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0", "AceComm-3.0", "AceSerializer-3.0")
 _Questie = {...}
+local L = LibStub("AceLocale-3.0"):GetLocale("QuestieLocale")
 if not QuestieConfigCharacter then
     QuestieConfigCharacter = {}
 end
@@ -154,20 +154,20 @@ local options = {
     childGroups = "tab",
     args = {
         general_tab = {
-            name = function() return QuestieLocale:GetUIString('OPTIONS_TAB') end,
+            name = function() return L['Options'] end,
             type = "group",
             order = 10,
             args = {
                 questie_header = {
                     type = "header",
                     order = 1,
-                    name = function() return QuestieLocale:GetUIString('QUESTIE_HEADER') end,
+                    name = function() return L['Questie Options'] end,
                 },
                 enabled = {
                     type = "toggle",
                     order = 3,
-                    name = function() return QuestieLocale:GetUIString('ENABLE_QUESTIE') end,
-                    desc = function() return QuestieLocale:GetUIString('ENABLE_QUESTIE_DESC') end,
+                    name = function() return L['Enable Icons'] end,
+                    desc = function() return L['Enable or disable Questie icons'] end,
                     width = "full",
                     get =    function ()
                                 return Questie.db.char.enabled
@@ -181,13 +181,13 @@ local options = {
                     type = "group",
                     order = 4,
                     inline = true,
-                    name = function() return QuestieLocale:GetUIString('ICON_TYPE_HEADER') end,
+                    name = function() return L['Icon Types'] end,
                     args = {
                         enableMapToggle = {
                             type = "toggle",
                             order = 1,
-                            name = function() return QuestieLocale:GetUIString('ENABLE_MAP_ICONS') end,
-                            desc = function() return QuestieLocale:GetUIString('ENABLE_MAP_ICONS_DESC') end,
+                            name = function() return L['Enable Map Icons'] end,
+                            desc = function() return L['Show/hide all icons from the main map'] end,
                             width = "full",
                             disabled = function() return (not Questie.db.char.enabled) end,
                             get =    function ()
@@ -201,8 +201,8 @@ local options = {
                         enableMiniMapToggle = {
                             type = "toggle",
                             order = 2,
-                            name = function() return QuestieLocale:GetUIString('ENABLE_MINIMAP_ICONS') end,
-                            desc = function() return QuestieLocale:GetUIString('ENABLE_MINIMAP_ICONS_DESC') end,
+                            name = function() return L['Enable Minimap Icons'] end,
+                            desc = function() return L['Show/hide all icons from the minimap'] end,
                             width = "full",
                             disabled = function() return (not Questie.db.char.enabled) end,
                             get =    function ()
@@ -221,8 +221,8 @@ local options = {
                         enableObjectivesToggle = {
                             type = "toggle",
                             order = 4,
-                            name = function() return QuestieLocale:GetUIString('ENABLE_OBJECTIVES') end,
-                            desc = function() return QuestieLocale:GetUIString('ENABLE_OBJECTIVES_DESC') end,
+                            name = function() return L['Enable Objective Icons'] end,
+                            desc = function() return L['When this is enabled, quest objective icons will be shown on the map/minimap'] end,
                             width = "full",
                             disabled = function() return (not Questie.db.char.enabled) end,
                             get =    function ()
@@ -236,8 +236,8 @@ local options = {
                         enableTurninsToggle = {
                             type = "toggle",
                             order = 5,
-                            name = function() return QuestieLocale:GetUIString('ENABLE_TURNINS') end,
-                            desc = function() return QuestieLocale:GetUIString('ENABLE_TURNINS_DESC') end,
+                            name = function() return L['Enable Completed Quest Icons'] end,
+                            desc = function() return L['When this is enabled, the quest turn-in locations will be shown on the map/minimap'] end,
                             width = "full",
                             disabled = function() return (not Questie.db.char.enabled) end,
                             get =    function ()
@@ -251,8 +251,8 @@ local options = {
                         enableAvailableToggle = {
                             type = "toggle",
                             order = 6,
-                            name = function() return QuestieLocale:GetUIString('ENABLE_AVAILABLE') end,
-                            desc = function() return QuestieLocale:GetUIString('ENABLE_AVAILABLE_DESC') end,
+                            name = function() return L['Enable Available Quest Icons'] end,
+                            desc = function() return L['When this is enabled, the available quest locations will be shown on the map/minimap'] end,
                             width = "full",
                             disabled = function() return (not Questie.db.char.enabled) end,
                             get =    function ()
@@ -268,8 +268,8 @@ local options = {
                 iconEnabled = {
                     type = "toggle",
                     order = 5,
-                    name = function() return QuestieLocale:GetUIString('ENABLE_ICON') end,
-                    desc = function() return QuestieLocale:GetUIString('ENABLE_ICON_DESC') end,
+                    name = function() return L['Enable Minimap Button'] end,
+                    desc = function() return L['Enable or disable the Questie minimap button. You can still access the options menu with /questie'] end,
                     width = "full",
                     get =    function ()
                                 return not Questie.db.profile.minimap.hide;
@@ -287,8 +287,8 @@ local options = {
                 instantQuest = {
                     type = "toggle",
                     order = 6,
-                    name = function() return QuestieLocale:GetUIString('ENABLE_INSTANT') end,
-                    desc = function() return QuestieLocale:GetUIString('ENABLE_INSTANT_DESC') end,
+                    name = function() return L['Enable Instant Quest Text'] end,
+                    desc = function() return L['Toggles the default Instant Quest Text option. This is just a shortcut for the WoW option in Interface'] end,
                     width = "full",
                     get =    function ()
                                 if GetCVar("instantQuestText") == '1' then return true else return false end;
@@ -304,8 +304,8 @@ local options = {
                 enableTooltipsToggle = {
                     type = "toggle",
                     order = 7,
-                    name = function() return QuestieLocale:GetUIString('ENABLE_TOOLTIPS') end,
-                    desc = function() return QuestieLocale:GetUIString('ENABLE_TOOLTIPS_DESC') end,
+                    name = function() return L['Enable Tooltips'] end,
+                    desc = function() return L['When this is enabled, quest info will be added to relevant mob/item tooltips'] end,
                     width = "full",
                     get =    function ()
                                 return Questie.db.global.enableTooltips;
@@ -318,14 +318,14 @@ local options = {
                 quest_options = {
                     type = "header",
                     order = 8,
-                    name = function() return QuestieLocale:GetUIString('LEVEL_HEADER') end,
+                    name = function() return L['Quest Level Options'] end,
                 },
                 Spacer_B = _QuestieOptions:Spacer(9),
                 gray = {
                     type = "toggle",
                     order = 10,
-                    name = function() return QuestieLocale:GetUIString('ENABLE_LOWLEVEL') end,
-                    desc = function() return QuestieLocale:GetUIString('ENABLE_LOWLEVEL_DESC') end,
+                    name = function() return L['Show All Quests below range (Low level quests)'] end,
+                    desc = function() return L['Enable or disable showing of showing low level quests on the map.'] end,
                     width = 200,
                     get =    function ()
                                 return Questie.db.char.lowlevel
@@ -333,14 +333,14 @@ local options = {
                     set =    function (info, value)
                                 Questie.db.char.lowlevel = value
                                 _QuestieOptions.AvailableQuestRedraw();
-                                Questie:debug(DEBUG_DEVELOP, QuestieLocale:GetUIString('DEBUG_LOWLEVEL'), value)
+                                Questie:debug(DEBUG_DEVELOP, L['DEBUG_LOWLEVEL'], value)
                             end,
                 },
                 minLevelFilter = {
                     type = "range",
                     order = 11,
-                    name = function() return QuestieLocale:GetUIString('LOWLEVEL_BELOW') end,
-                    desc = function() return QuestieLocale:GetUIString('LOWLEVEL_BELOW_DESC', _QuestieOptions.defaults.global.minLevelFilter) end,
+                    name = function() return L['< Show below level'] end,
+                    desc = function() return string.format(L['How many levels below your character to show. ( Default: %s )'], _QuestieOptions.defaults.global.minLevelFilter) end,
                     width = "normal",
                     min = 1,
                     max = 10,
@@ -348,14 +348,14 @@ local options = {
                     get = GetGlobalOptionLocal,
                     set = function (info, value)
                                 SetGlobalOptionLocal(info, value)
-                                _QuestieOptions:Delay(0.3, _QuestieOptions.AvailableQuestRedraw, QuestieLocale:GetUIString('DEBUIG_MINLEVEL', value))
+                                _QuestieOptions:Delay(0.3, _QuestieOptions.AvailableQuestRedraw, string.format(L['DEBUIG_MINLEVEL'], value))
                             end,
                 },
                 maxLevelFilter = {
                     type = "range",
                     order = 12,
-                    name = function() return QuestieLocale:GetUIString('LOWLEVEL_ABOVE') end,
-                    desc = function() return QuestieLocale:GetUIString('LOWLEVEL_ABOVE_DESC', _QuestieOptions.defaults.global.maxLevelFilter) end,
+                    name = function() return L['Show above level >'] end,
+                    desc = function() return string.format(L['How many levels above your character to show. ( Default: %s )'], _QuestieOptions.defaults.global.maxLevelFilter) end,
                     width = "normal",
                     min = 1,
                     max = 10,
@@ -363,21 +363,21 @@ local options = {
                     get = GetGlobalOptionLocal,
                     set = function (info, value)
                                 SetGlobalOptionLocal(info, value)
-                                _QuestieOptions:Delay(0.3, _QuestieOptions.AvailableQuestRedraw, QuestieLocale:GetUIString('DEBUG_MAXLEVEL', value))
+                                _QuestieOptions:Delay(0.3, _QuestieOptions.AvailableQuestRedraw, string.format(L['DEBUG_MAXLEVEL'], value))
                             end,
                 },
                 clusterLevel = {
                   type = "range",
                   order = 13,
-                  name = function() return QuestieLocale:GetUIString('CLUSTER') end,
-                  desc = function() return QuestieLocale:GetUIString('CLUSTER_DESC') end,
+                  name = function() return L['Objective icon cluster amount  (Not yet implemented)'] end,
+                  desc = function() return L['How much objective icons should cluster.'] end,
                   width = "double",
                   min = 0.02,
                   max = 5,
                   step = 0.01,
                   get = GetGlobalOptionLocal,
                   set = function (info, value)
-                        _QuestieOptions:Delay(0.5, _QuestieOptions.ClusterRedraw, QuestieLocale:GetUIString('DEBUG_CLUSTER', value))
+                        _QuestieOptions:Delay(0.5, _QuestieOptions.ClusterRedraw, string.format(L['DEBUG_CLUSTER'], value))
                         QUESTIE_NOTES_CLUSTERMUL_HACK = value;
                         SetGlobalOptionLocal(info, value)
                         end,
@@ -386,20 +386,20 @@ local options = {
         },
 
         minimap_tab = {
-            name = function() return QuestieLocale:GetUIString('MINIMAP_TAB') end,
+            name = function() return L['Minimap Options'] end,
             type = "group",
             order = 11,
             args = {
                 minimap_options = {
                     type = "header",
                     order = 1,
-                    name = function() return QuestieLocale:GetUIString('MINIMAP_HEADER') end,
+                    name = function() return L['Mini-Map Note Options'] end,
                 },
                 alwaysGlowMinimap = {
                     type = "toggle",
                     order = 1.7,
-                    name = function() return QuestieLocale:GetUIString('MINIMAP_ALWAYS_GLOW_TOGGLE') end,
-                    desc = function() return QuestieLocale:GetUIString('MINIMAP_ALWAYS_GLOW_TOGGLE_DESC') end,
+                    name = function() return L['Always glow behind minimap icons'] end,
+                    desc = function() return L['Draw a glow texture behind minimap icons, colored unique to each quest'] end,
                     width = "full",
                     get = GetGlobalOptionLocal,
                     set = function (info, value)
@@ -411,8 +411,8 @@ local options = {
                 globalMiniMapScale = {
                     type = "range",
                     order = 3,
-                    name = function() return QuestieLocale:GetUIString('MINIMAP_GLOBAL_SCALE') end,
-                    desc = function() return QuestieLocale:GetUIString('MINIMAP_GLOBAL_SCALE_DESC', _QuestieOptions.defaults.global.globalMiniMapScale) end,
+                    name = function() return L['Global Scale for Mini-Map Icons'] end,
+                    desc = function() return string.format(L['How large the Mini-Map icons are. ( Default: %s )'], _QuestieOptions.defaults.global.globalMiniMapScale) end,
                     width = "double",
                     min = 0.01,
                     max = 4,
@@ -426,8 +426,8 @@ local options = {
                 fadeLevel = {
                     type = "range",
                     order = 12,
-                    name = function() return QuestieLocale:GetUIString('MINIMAP_FADING') end,
-                    desc = function() return QuestieLocale:GetUIString('MINIMAP_FADING_DESC', _QuestieOptions.defaults.global.fadeLevel) end,
+                    name = function() return L['Fade objective distance'] end,
+                    desc = function() return string.format(L['How much objective icons should fade depending on distance. ( Default: %s )'], _QuestieOptions.defaults.global.fadeLevel) end,
                     width = "double",
                     min = 0.01,
                     max = 5,
@@ -441,8 +441,8 @@ local options = {
                 fadeOverPlayer = {
                     type = "toggle",
                     order = 14,
-                    name = function() return QuestieLocale:GetUIString('MINIMAP_FADE_PLAYER') end,
-                    desc = function() return QuestieLocale:GetUIString('MINIMAP_FADE_PLAYER_DESC') end,
+                    name = function() return L['Fade Icons over Player'] end,
+                    desc = function() return L['Fades icons on the minimap when your player walks near them.'] end,
                     width = "full",
                     get = GetGlobalOptionLocal,
                     set = function (info, value)
@@ -452,8 +452,8 @@ local options = {
                 fadeOverPlayerDistance = {
                     type = "range",
                     order = 15,
-                    name = function() return QuestieLocale:GetUIString('MINIMAP_FADE_PLAYER_DIST') end,
-                    desc = function() return QuestieLocale:GetUIString('MINIMAP_FADE_PLAYER_DIST_DESC', _QuestieOptions.defaults.global.fadeOverPlayerDistance) end,
+                    name = function() return L['Fade over Player Distance'] end,
+                    desc = function() return string.format(L['How far from player should icons start to fade. ( Default: %s )'], _QuestieOptions.defaults.global.fadeOverPlayerDistance) end,
                     width = "double",
                     min = 0.1,
                     max = 0.5,
@@ -467,8 +467,8 @@ local options = {
                 fadeOverPlayerLevel = {
                     type = "range",
                     order = 16,
-                    name = function() return QuestieLocale:GetUIString('MINIMAP_FADE_PLAYER_LEVEL') end,
-                    desc = function() return QuestieLocale:GetUIString('MINIMAP_FADE_PLAYER_LEVEL_DESC', _QuestieOptions.defaults.global.fadeOverPlayerLevel) end,
+                    name = function() return L['Fade over Player Amount'] end,
+                    desc = function() return string.format(L['How much should the icons around the player fade. ( Default: %s )'], _QuestieOptions.defaults.global.fadeOverPlayerLevel) end,
                     width = "double",
                     min = 0.1,
                     max = 1,
@@ -483,14 +483,14 @@ local options = {
                 fade_options = {
                     type = "header",
                     order = 21,
-                    name = function() return QuestieLocale:GetUIString('MINMAP_COORDS') end,
+                    name = function() return L['Mini-Map Coordinates'] end,
                 },
                 Spacer_F = _QuestieOptions:Spacer(22),
                 minimapCoordinatesEnabled = {
                     type = "toggle",
                     order = 23,
-                    name = function() return QuestieLocale:GetUIString('ENABLE_COORDS') end,
-                    desc = function() return QuestieLocale:GetUIString('ENABLE_COORDS_DESC') end,
+                    name = function() return L['Player Coordinates on Minimap'] end,
+                    desc = function() return L['Place the Player\'s coordinates on the Minimap title.'] end,
                     width = "full",
                     get = GetGlobalOptionLocal,
                     set = function (info, value)
@@ -505,20 +505,20 @@ local options = {
         },
 
         map_tab = {
-            name = function() return QuestieLocale:GetUIString('MAP_TAB') end,
+            name = function() return L['Map Options'] end,
             type = "group",
             order = 13,
             args = {
                 map_options = {
                     type = "header",
                     order = 1,
-                    name = function() return QuestieLocale:GetUIString('MAP_TAB') end,
+                    name = function() return L['Map Options'] end,
                 },
                 mapShowHideEnabled = {
                     type = "toggle",
                     order = 3,
-                    name = function() return QuestieLocale:GetUIString('ENABLE_MAP_BUTTON') end,
-                    desc = function() return QuestieLocale:GetUIString('ENABLE_MAP_BUTTON_DESC') end,
+                    name = function() return L['Show Questie Map Button'] end,
+                    desc = function() return L['Enable or disable the Show/Hide Questie Button on Map (May fix some Map Addon interactions)'] end,
                     width = "full",
                     get =    GetGlobalOptionLocal,
                     set =    function (info, value)
@@ -534,8 +534,8 @@ local options = {
                 alwaysGlowMap = {
                     type = "toggle",
                     order = 3.1,
-                    name = function() return QuestieLocale:GetUIString('MAP_ALWAYS_GLOW_TOGGLE') end,
-                    desc = function() return QuestieLocale:GetUIString('MAP_ALWAYS_GLOW_TOGGLE_DESC') end,
+                    name = function() return L['MAP_ALWAYS_GLOW_TOGGLE'] end,
+                    desc = function() return L['MAP_ALWAYS_GLOW_TOGGLE_DESC'] end,
                     width = "full",
                     get = GetGlobalOptionLocal,
                     set = function (info, value)
@@ -547,14 +547,14 @@ local options = {
                 mapnote_options = {
                     type = "header",
                     order = 7,
-                    name = function() return QuestieLocale:GetUIString('MAP_NOTES') end,
+                    name = function() return L['Map Note Options'] end,
                 },
                 Spacer_B = _QuestieOptions:Spacer(8),
                 globalScale = {
                     type = "range",
                     order = 9,
-                    name = function() return QuestieLocale:GetUIString('MAP_GLOBAL_SCALE') end,
-                    desc = function() return QuestieLocale:GetUIString('MAP_GLOBAL_SCALE_DESC', _QuestieOptions.defaults.global.globalScale) end,
+                    name = function() return L['Global Scale for Map Icons'] end,
+                    desc = function() return string.format(L['MAP_GLOBAL_SCALE_DESC'], _QuestieOptions.defaults.global.globalScale) end,
                     width = "double",
                     min = 0.01,
                     max = 4,
@@ -568,8 +568,8 @@ local options = {
                 availableScale = {
                     type = "range",
                     order = 9,
-                    name = function() return QuestieLocale:GetUIString('AVAILABLE_ICON_SCALE') end,
-                    desc = function() return QuestieLocale:GetUIString('AVAILABLE_ICON_SCALE_DESC', _QuestieOptions.defaults.global.availableScale) end,
+                    name = function() return L['AVAILABLE_ICON_SCALE'] end,
+                    desc = function() return string.format(L['AVAILABLE_ICON_SCALE_DESC'], _QuestieOptions.defaults.global.availableScale) end,
                     width = "double",
                     min = 0.01,
                     max = 4,
@@ -583,8 +583,8 @@ local options = {
                 eventScale = {
                     type = "range",
                     order = 9,
-                    name = function() return QuestieLocale:GetUIString('EVENT_ICON_SCALE') end,
-                    desc = function() return QuestieLocale:GetUIString('EVENT_ICON_SCALE_DESC', _QuestieOptions.defaults.global.eventScale) end,
+                    name = function() return L['EVENT_ICON_SCALE'] end,
+                    desc = function() return string.format(L['EVENT_ICON_SCALE_DESC'], _QuestieOptions.defaults.global.eventScale) end,
                     width = "double",
                     min = 0.01,
                     max = 4,
@@ -598,8 +598,8 @@ local options = {
                 lootScale = {
                     type = "range",
                     order = 9,
-                    name = function() return QuestieLocale:GetUIString('LOOT_ICON_SCALE') end,
-                    desc = function() return QuestieLocale:GetUIString('LOOT_ICON_SCALE_DESC', _QuestieOptions.defaults.global.lootScale) end,
+                    name = function() return L['LOOT_ICON_SCALE'] end,
+                    desc = function() return string.format(L['LOOT_ICON_SCALE_DESC'], _QuestieOptions.defaults.global.lootScale) end,
                     width = "double",
                     min = 0.01,
                     max = 4,
@@ -613,8 +613,8 @@ local options = {
                 monsterScale = {
                     type = "range",
                     order = 9,
-                    name = function() return QuestieLocale:GetUIString('MONSTER_ICON_SCALE') end,
-                    desc = function() return QuestieLocale:GetUIString('MONSTER_ICON_SCALE_DESC', _QuestieOptions.defaults.global.monsterScale) end,
+                    name = function() return L['MONSTER_ICON_SCALE'] end,
+                    desc = function() return string.format(L['MONSTER_ICON_SCALE_DESC'], _QuestieOptions.defaults.global.monsterScale) end,
                     width = "double",
                     min = 0.01,
                     max = 4,
@@ -628,8 +628,8 @@ local options = {
                 objectScale = {
                     type = "range",
                     order = 9,
-                    name = function() return QuestieLocale:GetUIString('OBJECT_ICON_SCALE') end,
-                    desc = function() return QuestieLocale:GetUIString('OBJECT_ICON_SCALE_DESC', _QuestieOptions.defaults.global.objectScale) end,
+                    name = function() return L['OBJECT_ICON_SCALE'] end,
+                    desc = function() return string.format(L['OBJECT_ICON_SCALE_DESC'], _QuestieOptions.defaults.global.objectScale) end,
                     width = "double",
                     min = 0.01,
                     max = 4,
@@ -644,14 +644,14 @@ local options = {
                 fade_options = {
                     type = "header",
                     order = 21,
-                    name = function() return QuestieLocale:GetUIString('MAP_COORDS') end,
+                    name = function() return L['MAP_COORDS'] end,
                 },
                 Spacer_D = _QuestieOptions:Spacer(22),
                 mapCoordinatesEnabled = {
                     type = "toggle",
                     order = 23,
-                    name = function() return QuestieLocale:GetUIString('ENABLE_MAP_COORDS') end,
-                    desc = function() return QuestieLocale:GetUIString('ENABLE_MAP_COORDS_DESC') end,
+                    name = function() return L['ENABLE_MAP_COORDS'] end,
+                    desc = function() return L['ENABLE_MAP_COORDS_DESC'] end,
                     width = "full",
                     get = GetGlobalOptionLocal,
                     set = function (info, value)
@@ -665,8 +665,8 @@ local options = {
                 mapCoordinatePrecision = {
                     type = "range",
                     order = 24,
-                    name = function() return QuestieLocale:GetUIString('MAP_COORDS_PRECISION') end,
-                    desc = function() return QuestieLocale:GetUIString('MAP_COORDS_PRECISION_DESC', _QuestieOptions.defaults.global.mapCoordinatePrecision) end,
+                    name = function() return L['MAP_COORDS_PRECISION'] end,
+                    desc = function() return string.format(L['MAP_COORDS_PRECISION_DESC'], _QuestieOptions.defaults.global.mapCoordinatePrecision) end,
                     width = "double",
                     min = 1,
                     max = 5,
@@ -681,20 +681,20 @@ local options = {
         },
 
         nameplate_tab = {
-            name = function() return QuestieLocale:GetUIString('NAMEPLATE_TAB') end,
+            name = function() return L['NAMEPLATE_TAB'] end,
             type = "group",
             order = 14,
             args = {
                 nameplate_options = {
                     type = "header",
                     order = 1,
-                    name = function() return QuestieLocale:GetUIString('NAMEPLATE_HEAD') end,
+                    name = function() return L['NAMEPLATE_HEAD'] end,
                 },
                 nameplateEnabled = {
                     type = "toggle",
                     order = 3,
-                    name = function() return QuestieLocale:GetUIString('NAMEPLATE_TOGGLE') end,
-                    desc = function() return QuestieLocale:GetUIString('NAMEPLATE_TOGGLE_DESC') end,
+                    name = function() return L['NAMEPLATE_TOGGLE'] end,
+                    desc = function() return L['NAMEPLATE_TOGGLE_DESC'] end,
                     width = "full",
                     get = GetGlobalOptionLocal,
                     set = function (info, value)
@@ -710,8 +710,8 @@ local options = {
                 nameplateX = {
                     type = "range",
                     order = 5,
-                    name = function() return QuestieLocale:GetUIString('NAMEPLATE_X') end,
-                    desc = function() return QuestieLocale:GetUIString('NAMEPLATE_X_DESC', _QuestieOptions.defaults.global.nameplateX ) end,
+                    name = function() return L['NAMEPLATE_X'] end,
+                    desc = function() return string.format(L['NAMEPLATE_X_DESC'], _QuestieOptions.defaults.global.nameplateX ) end,
                     width = "normal",
                     min = -200,
                     max = 200,
@@ -726,8 +726,8 @@ local options = {
                 nameplateY = {
                     type = "range",
                     order = 5,
-                    name = function() return QuestieLocale:GetUIString('NAMEPLATE_Y') end,
-                    desc = function() return QuestieLocale:GetUIString('NAMEPLATE_Y_DESC', _QuestieOptions.defaults.global.nameplateY) end,
+                    name = function() return L['NAMEPLATE_Y'] end,
+                    desc = function() return string.format(L['NAMEPLATE_Y_DESC'], _QuestieOptions.defaults.global.nameplateY) end,
                     width = "normal",
                     min = -200,
                     max = 200,
@@ -742,8 +742,8 @@ local options = {
                 nameplateScale = {
                     type = "range",
                     order = 6,
-                    name = function() return QuestieLocale:GetUIString('NAMEPLATE_SCALE') end,
-                    desc = function() return QuestieLocale:GetUIString('NAMEPLATE_SCALE_DESC', _QuestieOptions.defaults.global.nameplateScale) end,
+                    name = function() return L['NAMEPLATE_SCALE'] end,
+                    desc = function() return string.format(L['NAMEPLATE_SCALE_DESC'], _QuestieOptions.defaults.global.nameplateScale) end,
                     width = "double",
                     min = 0.01,
                     max = 4,
@@ -760,8 +760,8 @@ local options = {
                 nameplateReset = {
                     type = "execute",
                     order = 8,
-                    name = function() return QuestieLocale:GetUIString('NAMEPLATE_RESET_BTN') end,
-                    desc = function() return QuestieLocale:GetUIString('NAMEPLATE_RESET_BTN_DESC') end,
+                    name = function() return L['NAMEPLATE_RESET_BTN'] end,
+                    desc = function() return L['NAMEPLATE_RESET_BTN_DESC'] end,
                     disabled = function() return not Questie.db.global.nameplateEnabled end,
                     func = function (info, value)
                         Questie.db.global.nameplateX = _QuestieOptions.defaults.global.nameplateX;
@@ -774,14 +774,14 @@ local options = {
                 targetframe_header = {
                     type = "header",
                     order = 20,
-                    name = function() return QuestieLocale:GetUIString('TARGET_HEAD') end,
+                    name = function() return L['TARGET_HEAD'] end,
                 },
                 Spacer_D = _QuestieOptions:Spacer(21),
                 nameplateTargetFrameEnabled = {
                     type = "toggle",
                     order = 22,
-                    name = function() return QuestieLocale:GetUIString('TARGET_TOGGLE') end,
-                    desc = function() return QuestieLocale:GetUIString('TARGET_TOGGLE_DESC') end,
+                    name = function() return L['TARGET_TOGGLE'] end,
+                    desc = function() return L['TARGET_TOGGLE_DESC'] end,
                     width = "full",
                     get = GetGlobalOptionLocal,
                     set = function (info, value)
@@ -799,8 +799,8 @@ local options = {
                 nameplateTargetFrameX  = {
                     type = "range",
                     order = 24,
-                    name = function() return QuestieLocale:GetUIString('TARGET_X') end,
-                    desc = function() return QuestieLocale:GetUIString('TARGET_X_DESC', _QuestieOptions.defaults.global.nameplateTargetFrameX) end,
+                    name = function() return L['TARGET_X'] end,
+                    desc = function() return string.format(L['TARGET_X_DESC'], _QuestieOptions.defaults.global.nameplateTargetFrameX) end,
                     width = "normal",
                     min = -200,
                     max = 200,
@@ -815,8 +815,8 @@ local options = {
                 nameplateTargetFrameY  = {
                     type = "range",
                     order = 24,
-                    name = function() return QuestieLocale:GetUIString('TARGET_Y') end,
-                    desc = function() return QuestieLocale:GetUIString('TARGET_Y_DESC', _QuestieOptions.defaults.global.nameplateTargetFrameY) end,
+                    name = function() return L['TARGET_Y'] end,
+                    desc = function() return string.format(L['TARGET_Y_DESC'], _QuestieOptions.defaults.global.nameplateTargetFrameY) end,
                     width = "normal",
                     min = -200,
                     max = 200,
@@ -831,8 +831,8 @@ local options = {
                 nameplateTargetFrameScale  = {
                     type = "range",
                     order = 25,
-                    name = function() return QuestieLocale:GetUIString('TARGET_SCALE') end,
-                    desc = function() return QuestieLocale:GetUIString('TARGET_SCALE_DESC', _QuestieOptions.defaults.global.nameplateTargetFrameScale) end,
+                    name = function() return L['TARGET_SCALE'] end,
+                    desc = function() return string.format(L['TARGET_SCALE_DESC'], _QuestieOptions.defaults.global.nameplateTargetFrameScale) end,
                     width = "double",
                     min = 0.01,
                     max = 4,
@@ -849,8 +849,8 @@ local options = {
                 targetFrameReset = {
                     type = "execute",
                     order = 27,
-                    name = function() return QuestieLocale:GetUIString('TARGET_RESET_BTN') end,
-                    desc = function() return QuestieLocale:GetUIString('TARGET_RESET_BTN_DESC') end,
+                    name = function() return L['TARGET_RESET_BTN'] end,
+                    desc = function() return L['TARGET_RESET_BTN_DESC'] end,
                     disabled = function() return not Questie.db.global.nameplateTargetFrameEnabled end,
                     func = function (info, value)
                         Questie.db.global.nameplateTargetFrameX = _QuestieOptions.defaults.global.nameplateTargetFrameX;
@@ -863,20 +863,20 @@ local options = {
         },
 
         Advanced_tab = {
-            name = function() return QuestieLocale:GetUIString('ADV_TAB') end,
+            name = function() return L['ADV_TAB'] end,
             type = "group",
             order = 15,
             args = {
                 map_options = {
                     type = "header",
                     order = 1,
-                    name = function() return QuestieLocale:GetUIString('DEV_OPTIONS') end,
+                    name = function() return L['DEV_OPTIONS'] end,
                 },
                 debugEnabled = {
                     type = "toggle",
                     order = 4,
-                    name = function() return QuestieLocale:GetUIString('ENABLE_DEBUG') end,
-                    desc = function() return QuestieLocale:GetUIString('ENABLE_DEBUG_DESC') end,
+                    name = function() return L['ENABLE_DEBUG'] end,
+                    desc = function() return L['ENABLE_DEBUG_DESC'] end,
                     width = "full",
                     get =    function ()
                                 return Questie.db.global.debugEnabled
@@ -888,8 +888,8 @@ local options = {
                 debugLevel = {
                     type = "range",
                     order = 5,
-                    name = function() return QuestieLocale:GetUIString('DEBUG_LEVEL') end,
-                    desc = function() return QuestieLocale:GetUIString('DEBUG_LEVEL_DESC', "\nDEBUG_CRITICAL = 1\nDEBUG_ELEVATED = 2\nDEBUG_INFO = 3\nDEBUG_DEVELOP = 4\nDEBUG_SPAM = 5") end,
+                    name = function() return L['DEBUG_LEVEL'] end,
+                    desc = function() return string.format(L['DEBUG_LEVEL_DESC'], "\nDEBUG_CRITICAL = 1\nDEBUG_ELEVATED = 2\nDEBUG_INFO = 3\nDEBUG_DEVELOP = 4\nDEBUG_SPAM = 5") end,
                     width = "normal",
                     min = 1,
                     max = 5,
@@ -905,7 +905,7 @@ local options = {
                 locale_header = {
                     type = "header",
                     order = 11,
-                    name = function() return QuestieLocale:GetUIString('LOCALE') end,
+                    name = function() return L['LOCALE'] end,
                 },
                 Spacer_B = _QuestieOptions:Spacer(12),
                 locale_dropdown = {
@@ -923,7 +923,7 @@ local options = {
                         ['koKR'] = '한국어',
                     },
                     style = 'dropdown',
-                    name = function() return QuestieLocale:GetUIString('LOCALE_DROP') end,
+                    name = function() return L['LOCALE_DROP'] end,
                     get = function() return QuestieLocale:GetUILocale(); end,
                     set = function(input, lang)
                         QuestieLocale:SetUILocale(lang);
@@ -935,20 +935,20 @@ local options = {
                 reset_header = {
                     type = "header",
                     order = 21,
-                    name = function() return QuestieLocale:GetUIString('RESET_QUESTIE') end,
+                    name = function() return L['RESET_QUESTIE'] end,
                 },
                 Spacer_D = _QuestieOptions:Spacer(22),
                 reset_text = {
                     type = "description",
                     order = 23,
-                    name = function() return QuestieLocale:GetUIString('RESET_QUESTIE_DESC') end,
+                    name = function() return L['RESET_QUESTIE_DESC'] end,
                     fontSize = "medium",
                 },
                 questieReset = {
                     type = "execute",
                     order = 24,
-                    name = function() return QuestieLocale:GetUIString('RESET_QUESTIE_BTN') end,
-                    desc = function() return QuestieLocale:GetUIString('RESET_QUESTIE_BTN_DESC') end,
+                    name = function() return L['RESET_QUESTIE_BTN'] end,
+                    desc = function() return L['RESET_QUESTIE_BTN_DESC'] end,
                     func = function (info, value)
                         -- update all values to default
                         for k,v in pairs(_QuestieOptions.defaults.global) do
@@ -999,7 +999,7 @@ local options = {
                 github_text = {
                     type = "description",
                     order = 31,
-                    name = function() return Questie:Colorize(QuestieLocale:GetUIString('QUESTIE_DEV_MESSAGE'), 'purple') end,
+                    name = function() return Questie:Colorize(L['QUESTIE_DEV_MESSAGE'], 'purple') end,
                     fontSize = "medium",
                 },
 
@@ -1055,11 +1055,11 @@ local minimapIconLDB = LibStub("LibDataBroker-1.1"):NewDataObject("MinimapIcon",
 
     OnTooltipShow = function (tooltip)
         tooltip:AddLine("Questie", 1, 1, 1);
-        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_LEFT_CLICK') , 'gray') .. ": ".. QuestieLocale:GetUIString('ICON_TOGGLE'));
-        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_SHIFTLEFT_CLICK') , 'gray') .. ": ".. QuestieLocale:GetUIString('ICON_TOGGLE_QUESTIE'));
-        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_RIGHT_CLICK') , 'gray') .. ": ".. QuestieLocale:GetUIString('ICON_JOURNEY'));
-        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_CTRLRIGHT_CLICK') , 'gray') .. ": ".. QuestieLocale:GetUIString('ICON_HIDE'));
-        tooltip:AddLine (Questie:Colorize(QuestieLocale:GetUIString('ICON_CTRLLEFT_CLICK'),   'gray') .. ": ".. QuestieLocale:GetUIString('ICON_RELOAD'));
+        tooltip:AddLine (Questie:Colorize(L['ICON_LEFT_CLICK'] , 'gray') .. ": ".. L['ICON_TOGGLE']);
+        tooltip:AddLine (Questie:Colorize(L['ICON_SHIFTLEFT_CLICK'] , 'gray') .. ": ".. L['ICON_TOGGLE_QUESTIE']);
+        tooltip:AddLine (Questie:Colorize(L['ICON_RIGHT_CLICK'] , 'gray') .. ": ".. L['ICON_JOURNEY']);
+        tooltip:AddLine (Questie:Colorize(L['ICON_CTRLRIGHT_CLICK'] , 'gray') .. ": ".. L['ICON_HIDE']);
+        tooltip:AddLine (Questie:Colorize(L['ICON_CTRLLEFT_CLICK'],   'gray') .. ": ".. L['ICON_RELOAD']);
     end,
 });
 
@@ -1113,7 +1113,7 @@ function Questie:OnInitialize()
     self.configFrame = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Questie", "Questie");
 
     --Initialize the DB settings.
-    Questie:debug(DEBUG_DEVELOP, QuestieLocale:GetUIString('DEBUG_CLUSTER', Questie.db.global.clusterLevel))
+    Questie:debug(DEBUG_DEVELOP, string.format(L['DEBUG_CLUSTER'], Questie.db.global.clusterLevel))
     QUESTIE_NOTES_CLUSTERMUL_HACK = Questie.db.global.clusterLevel;
 
 
@@ -1123,9 +1123,9 @@ function Questie:OnInitialize()
 
     -- Update the default text on the map show/hide button for localization
     if Questie.db.char.enabled then
-        Questie_Toggle:SetText(QuestieLocale:GetUIString('QUESTIE_MAP_BUTTON_HIDE'));
+        Questie_Toggle:SetText(L['QUESTIE_MAP_BUTTON_HIDE']);
     else
-        Questie_Toggle:SetText(QuestieLocale:GetUIString('QUESTIE_MAP_BUTTON_SHOW'));
+        Questie_Toggle:SetText(L['QUESTIE_MAP_BUTTON_SHOW']);
         QuestieQuest:ToggleNotes(false)
     end
 
@@ -1165,11 +1165,11 @@ function Questie:QuestieSlash(input)
 
     -- /questie help || /questie ?
     if input == "help" or input == "?" then
-        print(Questie:Colorize(QuestieLocale:GetUIString('SLASH_HEAD'), 'yellow'));
-        print(Questie:Colorize(QuestieLocale:GetUIString('SLASH_CONFIG'), 'yellow'));
-        print(Questie:Colorize(QuestieLocale:GetUIString('SLASH_TOGGLE_QUESTIE'), 'yellow'));
-        print(Questie:Colorize(QuestieLocale:GetUIString('SLASH_MINIMAP'), 'yellow'));
-        print(Questie:Colorize(QuestieLocale:GetUIString('SLASH_JOURNEY'), 'yellow'));
+        print(Questie:Colorize(L['SLASH_HEAD'], 'yellow'));
+        print(Questie:Colorize(L['SLASH_CONFIG'], 'yellow'));
+        print(Questie:Colorize(L['SLASH_TOGGLE_QUESTIE'], 'yellow'));
+        print(Questie:Colorize(L['SLASH_MINIMAP'], 'yellow'));
+        print(Questie:Colorize(L['SLASH_JOURNEY'], 'yellow'));
         return;
     end
 
@@ -1183,7 +1183,7 @@ function Questie:QuestieSlash(input)
         end
         return;
     end
-	
+
     if input == "reload" then
         QuestieQuest:SmoothReset()
         return
@@ -1211,7 +1211,7 @@ function Questie:QuestieSlash(input)
         return;
     end
 
-    print(Questie:Colorize("[Questie] :: ", 'yellow') .. QuestieLocale:GetUIString('SLASH_INVALID') .. Questie:Colorize('/questie help', 'yellow'));
+    print(Questie:Colorize("[Questie] :: ", 'yellow') .. string.format(L['SLASH_INVALID'] .. Questie:Colorize('/questie help', 'yellow')));
 end
 
 function Questie:Colorize(str, color)

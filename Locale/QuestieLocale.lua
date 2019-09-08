@@ -17,7 +17,7 @@ function QuestieLocale:FallbackLocale(lang)
         return 'enUS';
     elseif lang == 'enCN' then
         return 'zhCN';
-    elseif lang == 'enTW' then 
+    elseif lang == 'enTW' then
         return 'zhTW';
     elseif lang == 'esMX' then
         return 'esES';
@@ -60,7 +60,7 @@ end
 function QuestieLocale:_GetUIString(key, ...)
     if key then
         -- convert all args to string
-        local arg = {...};        
+        local arg = {...};
         for i, v in ipairs(arg) do
             arg[i] = tostring(v);
         end
@@ -85,4 +85,3 @@ function QuestieLocale:_GetUIString(key, ...)
     end
 
 end
-

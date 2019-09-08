@@ -1,4 +1,5 @@
 QuestieMap = {...}
+local L = LibStub("AceLocale-3.0"):GetLocale("QuestieLocale")
 
 qQuestIdFrames = {}
 
@@ -33,7 +34,7 @@ function QuestieMap:UnloadQuestFrames(QuestId)
             frame:Unload();
         end
         qQuestIdFrames[QuestId] = nil;
-        Questie:Debug(DEBUG_DEVELOP, "[QuestieMap]: ".. QuestieLocale:GetUIString('DEBUG_UNLOAD_QFRAMES', QuestId))
+        Questie:Debug(DEBUG_DEVELOP, "[QuestieMap]: ".. string.format(L['DEBUG_UNLOAD_QFRAMES'], QuestId))
     end
 end
 
@@ -209,7 +210,7 @@ function QuestieMap:DrawWorldIcon(data, AreaID, x, y, showFlag)
 
         table.insert(qQuestIdFrames[data.Id], icon:GetName())
         table.insert(qQuestIdFrames[data.Id], iconMinimap:GetName())
-        
+
         -- preset hidden state when needed (logic from QuestieQuest:UpdateHiddenNotes
         -- we should add all this code to something like obj:CheckHide() instead of copying it
         if (QuestieQuest.NotesHidden or (((not Questie.db.global.enableObjectives) and (icon.data.Type == "monster" or icon.data.Type == "object" or icon.data.Type == "event" or icon.data.Type == "item"))
@@ -220,8 +221,8 @@ function QuestieMap:DrawWorldIcon(data, AreaID, x, y, showFlag)
             icon:FakeHide()
             iconMinimap:FakeHide()
         end
-        
-        
+
+
         return icon, iconMinimap;
     end
     return nil, nil

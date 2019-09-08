@@ -1,5 +1,6 @@
 QuestieFramePool = {...} -- GLobal Functions
 local _QuestieFramePool = {...} --Local Functions
+local L = LibStub("AceLocale-3.0"):GetLocale("QuestieLocale")
 qNumberOfFrames = 0
 
 local unusedframes = {}
@@ -27,18 +28,18 @@ ICON_TYPE_BLACK = _QuestieFramePool.addonPath.."Icons\\black.blp"
 StaticPopupDialogs["QUESTIE_CONFIRMHIDE"] = {
     text = "", -- set before showing
     QuestID = 0, -- set before showing
-    button1 = QuestieLocale:GetUIString("CONFIRM_HIDE_YES"),
-    button2 = QuestieLocale:GetUIString("CONFIRM_HIDE_NO"),
+    button1 = L['CONFIRM_HIDE_YES'],
+    button2 = L['CONFIRM_HIDE_NO'],
     OnAccept = function()
         QuestieQuest:HideQuest(StaticPopupDialogs["QUESTIE_CONFIRMHIDE"].QuestID)
     end,
     SetQuest = function(self, id)
         self.QuestID = id
-        self.text = QuestieLocale:GetUIString("CONFIRM_HIDE_QUEST", QuestieDB:GetQuest(self.QuestID):GetColoredQuestName())
-        
+        self.text = string.format(L['CONFIRM_HIDE_QUEST'], QuestieDB:GetQuest(self.QuestID):GetColoredQuestName())
+
         -- locale might not be loaded when this is first created (this does happen almost always)
-        self.button1 = QuestieLocale:GetUIString("CONFIRM_HIDE_YES")
-        self.button2 = QuestieLocale:GetUIString("CONFIRM_HIDE_NO")
+        self.button1 = L['CONFIRM_HIDE_YES']
+        self.button2 = L['CONFIRM_HIDE_NO']
     end,
     OnShow = function(self)
         self:SetFrameStrata("TOOLTIP")
@@ -52,15 +53,15 @@ StaticPopupDialogs["QUESTIE_CONFIRMHIDE"] = {
 -- Global Functions --
 function QuestieFramePool:GetFrame()
     local f = nil--tremove(unusedframes)
-    
+
     -- im not sure its this, but using string keys for the table prevents double-adding to unusedframes, calling unload() twice could double-add it maybe?
     for k,v in pairs(unusedframes) do -- yikes (why is tremove broken? is there a better to get the first key of a non-indexed table?)
         f = v
         unusedframes[k] = nil
         break
     end
-    
-    
+
+
     if f and f.GetName and usedFrames[f:GetName()] then
         -- something went horribly wrong (desync bug?) don't use this frame since its already in use
         f = nil
@@ -84,28 +85,28 @@ function QuestieFramePool:GetFrame()
     f.x = nil;f.y = nil;f.AreaID = nil;
     f:Hide();
     --end
-    
+
     if f.texture then
         f.texture:SetVertexColor(1, 1, 1, 1)
     end
     f.loaded = true
     f.shouldBeShowing = nil
     f.hidden = nil
-    
+
     if f.baseOnShow then
         f:SetScript("OnShow", f.baseOnShow)
     end
-    
+
     if f.baseOnUpdate then
         f:SetScript("OnUpdate", f.baseOnUpdate)
     else
         f:SetScript("OnUpdate", nil)
     end
-    
+
     if f.baseOnHide then
         f:SetScript("OnHide", f.baseOnHide)
     end
-    
+
     usedFrames[f:GetName()] = f
     return f
 end
@@ -118,7 +119,7 @@ end
 
 function QuestieFramePool:UnloadAll()
 
-    Questie:Debug(DEBUG_DEVELOP, "[QuestieFramePool] ".. QuestieLocale:GetUIString('DEBUG_UNLOAD_ALL', #allframes))
+    Questie:Debug(DEBUG_DEVELOP, "[QuestieFramePool] ".. string.format(L['DEBUG_UNLOAD_ALL'], #allframes))
     for i, frame in ipairs(allframes) do
         --_QuestieFramePool:UnloadFrame(frame);
         frame:Unload()
@@ -232,7 +233,7 @@ function _QuestieFramePool:QuestieCreateFrame()
                 --WorldMapFrame:Hide()
                 --StaticPopup:SetFrameStrata("TOOLTIP")
                 StaticPopup_Show ("QUESTIE_CONFIRMHIDE")
-                
+
             end
         end
         if self and self.data and self.data.UiMapID and IsControlKeyDown() and TomTom and TomTom.AddWaypoint then
@@ -285,7 +286,7 @@ function _QuestieFramePool:QuestieCreateFrame()
         self:SetScript("OnUpdate", nil)
         self:SetScript("OnShow", nil)
         self:SetScript("OnHide", nil)
-        
+
         --We are reseting the frames, making sure that no data is wrong.
         if self ~= nil and self.hidden and self._show ~= nil and self._hide ~= nil then -- restore state to normal (toggle questie)
             self.hidden = false
@@ -315,7 +316,7 @@ function _QuestieFramePool:QuestieCreateFrame()
     end
     f.data = {}
     f:Hide()
-    
+
     -- functions for fake hide/unhide
     function f:FakeHide()
         if not self.hidden then
@@ -443,9 +444,9 @@ function _QuestieFramePool:Questie_Tooltip(self)
                         end
                         local dat = {};
                         if icon.data.Type == "complete" then
-                            dat.type = QuestieLocale:GetUIString("TOOLTIP_QUEST_COMPLETE");
+                            dat.type = L['TOOLTIP_QUEST_COMPLETE'];
                         else
-                            dat.type = QuestieLocale:GetUIString("TOOLTIP_QUEST_AVAILABLE");
+                            dat.type = L['TOOLTIP_QUEST_AVAILABLE'];
                         end
                         dat.title = icon.data.QuestData:GetColoredQuestName()
                         dat.subData = icon.data.QuestData.Description
@@ -508,7 +509,7 @@ function _QuestieFramePool:Questie_Tooltip(self)
         for k, v in pairs(self.questOrder) do -- this logic really needs to be improved
             if haveGiver then
                 self:AddLine(" ")
-                self:AddDoubleLine(k, QuestieLocale:GetUIString("TOOLTIP_QUEST_ACTIVE"));
+                self:AddDoubleLine(k, L['TOOLTIP_QUEST_ACTIVE']);
                 haveGiver = false -- looks better when only the first one shows (active)
             else
                 self:AddLine(k);

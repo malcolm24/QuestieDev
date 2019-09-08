@@ -1,13 +1,13 @@
 QuestieQuest = {...}
 local _QuestieQuest = {...}
-
+local L = LibStub("AceLocale-3.0"):GetLocale("QuestieLocale")
 
 qAvailableQuests = {} --Gets populated at PLAYER_ENTERED_WORLD
 
 qCurrentQuestlog = {} --Gets populated by QuestieQuest:GetAllQuestIds(), this is either an object to the quest in question, or the ID if the object doesn't exist.
 
 function QuestieQuest:Initialize()
-    Questie:Debug(DEBUG_INFO, "[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_GET_QUEST_COMP'))
+    Questie:Debug(DEBUG_INFO, "[QuestieQuest]: ".. L['DEBUG_GET_QUEST_COMP'])
     --GetQuestsCompleted(Questie.db.char.complete)
     Questie.db.char.complete = GetQuestsCompleted()
     --local db = {}
@@ -31,7 +31,7 @@ function QuestieQuest:ToggleNotes(desiredValue)
         return -- we already have the desired state
     end
     if QuestieQuest.NotesHidden then
-        Questie_Toggle:SetText(QuestieLocale:GetUIString('QUESTIE_MAP_BUTTON_HIDE'));
+        Questie_Toggle:SetText(L['QUESTIE_MAP_BUTTON_HIDE']);
         for questId, framelist in pairs(qQuestIdFrames) do
             for index, frameName in ipairs(framelist) do -- this may seem a bit expensive, but its actually really fast due to the order things are checked
                 local icon = _G[frameName];
@@ -45,7 +45,7 @@ function QuestieQuest:ToggleNotes(desiredValue)
             end
         end
     else
-        Questie_Toggle:SetText(QuestieLocale:GetUIString('QUESTIE_MAP_BUTTON_SHOW'));
+        Questie_Toggle:SetText(L['QUESTIE_MAP_BUTTON_SHOW']);
         for questId, framelist in pairs(qQuestIdFrames) do
             for index, frameName in ipairs(framelist) do -- this may seem a bit expensive, but its actually really fast due to the order things are checked
                 local icon = _G[frameName];
@@ -224,14 +224,14 @@ end
 -- some plebs dont have beta, i need diz
 function LOGONDEBUG_ADDQUEST(QuestId)
     --qCurrentQuestlog[QuestId] = QuestieDB:GetQuest(QuestId);
-    Questie:Debug(DEBUG_DEVELOP, "[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_ADD_QUEST', QuestId, qCurrentQuestlog[QuestId]));
+    Questie:Debug(DEBUG_DEVELOP, "[QuestieQuest]: ".. string.format(L['DEBUG_ADD_QUEST'], QuestId, qCurrentQuestlog[QuestId]));
     QuestieQuest:AcceptQuest(QuestId);
     --QuestieQuest:TrackQuest(QuestId)
 end
 
 function LOGONDEBUG_REMOVEQUEST(QuestId)
     QuestieQuest:AbandonedQuest(QuestId);
-    Questie:Debug(DEBUG_DEVELOP, "[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_REMOVE_QUEST', QuestId, qCurrentQuestlog[QuestId]));
+    Questie:Debug(DEBUG_DEVELOP, "[QuestieQuest]: ".. string.format(L['DEBUG_REMOVE_QUEST'], QuestId, qCurrentQuestlog[QuestId]));
 end
 
 --Use the category order to draw the quests and trust the database order.
@@ -304,7 +304,7 @@ function QuestieQuest:AcceptQuest(questId)
     --TODO: Insert call to drawing objective logic here!
     --QuestieQuest:TrackQuest(questId);
 
-    Questie:Debug(DEBUG_INFO, "[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_ACCEPT_QUEST', questId));
+    Questie:Debug(DEBUG_INFO, "[QuestieQuest]: ".. string.format(L['DEBUG_ACCEPT_QUEST'], questId));
 
 end
 
@@ -320,7 +320,7 @@ function QuestieQuest:CompleteQuest(QuestId)
     QuestieQuest:CalculateAvailableQuests()
     QuestieQuest:DrawAllAvailableQuests();
 
-    Questie:Debug(DEBUG_INFO, "[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_COMPLETE_QUEST', QuestId));
+    Questie:Debug(DEBUG_INFO, "[QuestieQuest]: ".. string.format(L['DEBUG_COMPLETE_QUEST'], QuestId));
 end
 
 function QuestieQuest:AbandonedQuest(QuestId)
@@ -346,7 +346,7 @@ function QuestieQuest:AbandonedQuest(QuestId)
         QuestieQuest:CalculateAvailableQuests()
         QuestieQuest:DrawAllAvailableQuests()
 
-        Questie:Debug(DEBUG_INFO, "[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_ABANDON_QUEST', QuestId));
+        Questie:Debug(DEBUG_INFO, "[QuestieQuest]: ".. string.format(L['DEBUG_ABANDON_QUEST'], QuestId));
     end
 end
 
@@ -369,7 +369,7 @@ function QuestieQuest:UpdateQuest(QuestId)
 end
 --Run this if you want to update the entire table
 function QuestieQuest:GetAllQuestIds()
-    Questie:Debug(DEBUG_INFO, "[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_GET_QUEST'));
+    Questie:Debug(DEBUG_INFO, "[QuestieQuest]: ".. L['DEBUG_GET_QUEST']);
     numEntries, numQuests = GetNumQuestLogEntries();
     qCurrentQuestlog = {}
     for index = 1, numEntries do
@@ -387,14 +387,15 @@ function QuestieQuest:GetAllQuestIds()
             else
                 qCurrentQuestlog[questId] = questId
             end
-            Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_ADD_QUEST', questId, qCurrentQuestlog[questId]));
+            local str = Quest.LocalizedName or Quest.Name or "(quest not found in QuestieDB)"
+            Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: ".. string.format(L['DEBUG_ADD_QUEST'], questId, str))
         end
     end
     QuestieTracker:Update()
 end
 
 function QuestieQuest:GetAllQuestIdsNoObjectives()
-    Questie:Debug(DEBUG_INFO, "[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_GET_QUEST'));
+    Questie:Debug(DEBUG_INFO, "[QuestieQuest]: ".. L['DEBUG_GET_QUEST']);
     numEntries, numQuests = GetNumQuestLogEntries();
     qCurrentQuestlog = {}
     for index = 1, numEntries do
@@ -404,10 +405,13 @@ function QuestieQuest:GetAllQuestIdsNoObjectives()
             Quest = QuestieDB:GetQuest(questId)
             if(Quest ~= nil) then
                 qCurrentQuestlog[questId] = Quest
+                Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: ".. string.format(L['DEBUG_ADD_QUEST'], questId, Quest.Name));
             else
                 qCurrentQuestlog[questId] = questId
+                Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: ".. string.format(L['DEBUG_ADD_QUEST'], questId, "(not found in QuestieDB)"));
             end
-            Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_ADD_QUEST', questId, qCurrentQuestlog[questId]));
+            local str = Quest.LocalizedName or Quest.Name or "(quest not found in QuestieDB)"
+            Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: ".. string.format(L['DEBUG_ADD_QUEST'], questId, str))
         end
     end
 end
@@ -443,7 +447,7 @@ function QuestieQuest:UpdateObjectiveNotes(Quest)
         for k, v in pairs(Quest.Objectives) do
             result, err = pcall(QuestieQuest.PopulateObjective, QuestieQuest, Quest, k, v);
             if not result then
-                Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_POP_ERROR', Quest.Name, Quest.Id, k, err));
+                Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: ".. string.format(L['DEBUG_POP_ERROR'], Quest.Name, Quest.Id, k, err));
             end
         end
     end
@@ -456,10 +460,10 @@ function QuestieQuest:AddFinisher(Quest)
         elseif Quest.Finisher.Type == "object" then
             NPC = QuestieDB:GetObject(Quest.Finisher.Id)
         else
-            Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_UNHANDLE_FINISH', Quest.Finisher.Type, Quest.Id, Quest.Name))
+            Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: ".. string.format(L['DEBUG_UNHANDLE_FINISH'], Quest.Finisher.Type, Quest.Id, Quest.Name))
         end
     else
-        Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_NO_FINISH', Quest.Id, Quest.Name))
+        Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: ".. string.format(L['DEBUG_NO_FINISH'], Quest.Id, Quest.Name))
     end
     --NPC = QuestieDB:GetNPC(Quest.Finisher)
     if(NPC ~= nil and NPC.Spawns ~= nil) then
@@ -804,7 +808,7 @@ function QuestieQuest:PopulateObjectiveNotes(Quest) -- this should be renamed to
         SelectQuestLogEntry(v.Index)
         result, err = pcall(QuestieQuest.PopulateObjective, QuestieQuest, Quest, k, v, false);
         if not result then
-            Questie:Error("[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_POPULATE_ERR', Quest.Name or "No quest name", Quest.Id or "No quest id", k or "No objective", err or "No error"));
+            Questie:Error("[QuestieQuest]: ".. string.format(L['DEBUG_POPULATE_ERR'], Quest.Name or "No quest name", Quest.Id or "No quest id", k or "No objective", err or "No error"));
         end
     end
 
@@ -813,7 +817,7 @@ function QuestieQuest:PopulateObjectiveNotes(Quest) -- this should be renamed to
         for _, objective in pairs(Quest.SpecialObjectives) do
             result, err = pcall(QuestieQuest.PopulateObjective, QuestieQuest, Quest, 0, objective, true);
             if not result then
-                Questie:Error("[QuestieQuest]: [SpecialObjectives] ".. QuestieLocale:GetUIString('DEBUG_POPULATE_ERR', Quest.Name or "No quest name", Quest.Id or "No quest id", k or "No objective", err or "No error"));
+                Questie:Error("[QuestieQuest]: [SpecialObjectives] ".. string.format(L['DEBUG_POPULATE_ERR'], Quest.Name or "No quest name", Quest.Id or "No quest id", k or "No objective", err or "No error"));
             end
         end
     end
@@ -825,7 +829,7 @@ end
 function QuestieQuest:PopulateQuestLogInfo(Quest)
     --Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: PopulateMeta1:", Quest.Id, Quest.Name)
     if Quest.Objectives == nil then
-        Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: PopulateQuestLogInfo: ".. QuestieLocale:GetUIString('DEBUG_POPTABLE'))
+        Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: PopulateQuestLogInfo: ".. L['DEBUG_POPTABLE'])
         Quest.Objectives = {};
     end
     local logID = GetQuestLogIndexByID(Quest.Id);
@@ -850,7 +854,7 @@ function QuestieQuest:GetAllQuestObjectives(Quest)
     local count = GetNumQuestLeaderBoards()
     if Quest.Objectives == nil then
         Quest.Objectives = {}; -- TODO: remove after api bug is fixed!!!
-        Questie:Debug(DEBUG_CRITICAL, "[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_OBJ_TABLE'));
+        Questie:Debug(DEBUG_CRITICAL, "[QuestieQuest]: ".. L['DEBUG_OBJ_TABLE']);
     end
 
     for i = 1, count do
@@ -931,7 +935,7 @@ function QuestieQuest:GetAllQuestObjectives(Quest)
         end
 
         if (not Quest.Objectives[i]) or (not Quest.Objectives[i].Id) then
-            Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: ".. QuestieLocale:GetUIString('DEBUG_ENTRY_ID', objectiveType, objectiveDesc))
+            Questie:Debug(DEBUG_SPAM, "[QuestieQuest]: ".. string.format(L['DEBUG_ENTRY_ID'], objectiveType, objectiveDesc))
         end
 
     end
@@ -1129,7 +1133,7 @@ function QuestieQuest:DrawAllAvailableQuests()--All quests between
         end
         count = count + 1
     end
-    Questie:Debug(DEBUG_INFO, "[QuestieQuest]", QuestieLocale:GetUIString('DEBUG_DRAW', count, qPlayerLevel));
+    Questie:Debug(DEBUG_INFO, "[QuestieQuest]", string.format(L['DEBUG_DRAW'], count, qPlayerLevel));
 end
 
 

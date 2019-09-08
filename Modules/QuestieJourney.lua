@@ -1,5 +1,6 @@
 QuestieJourney = {};
 local AceGUI = LibStub("AceGUI-3.0");
+local L = LibStub("AceLocale-3.0"):GetLocale("QuestieLocale")
 
 local journeyFrame = {};
 local isWindowShown = false;
@@ -55,7 +56,7 @@ local function splitJourneyByDate()
     for i, v in pairs(dateTable) do
         yearTable = {
             value = i,
-            text = QuestieLocale:GetUIString('JOURNEY_TABLE_YEAR', i),
+            text = string.format(L['JOURNEY_TABLE_YEAR'], i),
             children = {},
         };
 
@@ -73,26 +74,26 @@ local function splitJourneyByDate()
 
                 local entryText = '';
                 if entry.Event == "Level" then
-                    entryText = QuestieLocale:GetUIString('JOURNEY_LEVELREACH', entry.NewLevel);
+                    entryText = string.format(L['JOURNEY_LEVELREACH'], entry.NewLevel);
                 elseif entry.Event == "Note" then
-                    entryText = QuestieLocale:GetUIString('JOURNEY_TABLE_NOTE', entry.Title);
+                    entryText = string.format(L['JOURNEY_TABLE_NOTE'], entry.Title);
                 elseif entry.Event == "Quest" then
                     local state = '';
                     if entry.SubType == "Accept" then
-                        state = QuestieLocale:GetUIString('JOURNEY_ACCEPT');
+                        state = L['JOURNEY_ACCEPT'];
                     elseif entry.SubType == "Complete" then
-                        state = QuestieLocale:GetUIString('JOUNREY_COMPLETE');
+                        state = L['JOUNREY_COMPLETE'];
                     elseif entry.SubType == "Abandon" then
-                        state = QuestieLocale:GetUIString('JOURNEY_ABADON');
+                        state = L['JOURNEY_ABADON'];
                     else
                         state = "ERROR!!";
                     end
                     local quest = QuestieDB:GetQuest(entry.Quest)
                     if quest then
                         local qName = quest.Name;
-                        entryText = QuestieLocale:GetUIString('JOURNEY_TABLE_QUEST', state, qName);
+                        entryText = string.format(L['JOURNEY_TABLE_QUEST'], state, qName);
                     else
-                        entryText = QuestieLocale:GetUIString('JOURNEY_MISSING_QUEST');
+                        entryText = L['JOURNEY_MISSING_QUEST'];
                     end
                 end
 
@@ -157,7 +158,7 @@ local function manageJourneyTree(container)
 
                 if entry.Event == "Note" then
 
-                    header:SetText(QuestieLocale:GetUIString('JOURNEY_TABLE_NOTE', entry.Title));
+                    header:SetText(string.format(L['JOURNEY_TABLE_NOTE'], entry.Title));
 
                     local note = AceGUI:Create("Label");
                     note:SetFullWidth(true);
@@ -165,15 +166,15 @@ local function manageJourneyTree(container)
                     f:AddChild(note);
                     Spacer(f);
 
-                    created:SetText(QuestieLocale:GetUIString('JOURNEY_NOTE_CREATED', timestamp));
+                    created:SetText(string.format(L['JOURNEY_NOTE_CREATED'], timestamp));
                     f:AddChild(created);
 
                 elseif entry.Event == "Level" then
 
-                    header:SetText(QuestieLocale:GetUIString('JOURNEY_LEVELREACH', entry.NewLevel));
+                    header:SetText(string.format(L['JOURNEY_LEVELREACH'], entry.NewLevel));
 
                     local congrats = AceGUI:Create("Label");
-                    congrats:SetText(QuestieLocale:GetUIString('JOURNEY_LEVELUP', entry.NewLevel));
+                    congrats:SetText(string.format(L['JOURNEY_LEVELUP'], entry.NewLevel));
                     congrats:SetFullWidth(true);
                     f:AddChild(congrats);
 
@@ -184,18 +185,18 @@ local function manageJourneyTree(container)
 
                     local state = '';
                     if entry.SubType == "Accept" then
-                        state = QuestieLocale:GetUIString('JOURNEY_ACCEPT');
+                        state = L['JOURNEY_ACCEPT'];
                     elseif entry.SubType == "Complete" then
-                        state = QuestieLocale:GetUIString('JOUNREY_COMPLETE');
+                        state = L['JOUNREY_COMPLETE'];
                     elseif entry.SubType == "Abandon" then
-                        state = QuestieLocale:GetUIString('JOURNEY_ABADON');
+                        state = L['JOURNEY_ABADON'];
                     else
                         state = "ERROR!!";
                     end
 
                     local quest = QuestieDB:GetQuest(entry.Quest)
                     local qName = quest.Name;
-                    header:SetText(QuestieLocale:GetUIString('JOURNEY_TABLE_QUEST', state, qName));
+                    header:SetText(string.format(L['JOURNEY_TABLE_QUEST'], state, qName));
 
 
                     local obj = AceGUI:Create("Label");
@@ -210,7 +211,7 @@ local function manageJourneyTree(container)
 
                         -- Display Party Members
                         local partyFrame = AceGUI:Create("InlineGroup");
-                        partyFrame:SetTitle(QuestieLocale:GetUIString('JOURNEY_PARTY_TITLE'));
+                        partyFrame:SetTitle(L['JOURNEY_PARTY_TITLE']);
                         partyFrame:SetFullWidth(true);
                         f:AddChild(partyFrame);
 
@@ -228,7 +229,7 @@ local function manageJourneyTree(container)
                     end
 
 
-                    created:SetText(QuestieLocale:GetUIString('JOURNEY_TABLE_QUEST', state, timestamp));
+                    created:SetText(string.format(L['JOURNEY_TABLE_QUEST'], state, timestamp));
                     f:AddChild(created);
 
                 else
@@ -250,7 +251,7 @@ end
 -- function that draws the Tab for the "My Journey"
 local function DrawJourneyTab(container)
     local head = AceGUI:Create("Heading");
-    head:SetText(QuestieLocale:GetUIString('JOURNEY_RECENT_EVENTS'));
+    head:SetText(L['JOURNEY_RECENT_EVENTS']);
     head:SetFullWidth(true);
     container:AddChild(head);
     Spacer(container);
@@ -279,19 +280,19 @@ local function DrawJourneyTab(container)
                 local qName = Questie:Colorize(quest.Name, 'gray');
 
                 if Questie.db.char.journey[i].SubType == "Accept" then
-                    recentEvents[i]:SetText( timestamp .. Questie:Colorize( QuestieLocale:GetUIString('JOURNEY_QUEST_ACCEPT', qName) , 'yellow')  );
+                    recentEvents[i]:SetText( timestamp .. Questie:Colorize( string.format(L['JOURNEY_QUEST_ACCEPT'], qName) , 'yellow')  );
                 elseif Questie.db.char.journey[i].SubType == "Abandon" then
-                    recentEvents[i]:SetText( timestamp .. Questie:Colorize( QuestieLocale:GetUIString('JOURNEY_QUEST_ABANDON', qName) , 'yellow')  );
+                    recentEvents[i]:SetText( timestamp .. Questie:Colorize( string.format(L['JOURNEY_QUEST_ABANDON'], qName) , 'yellow')  );
                 elseif Questie.db.char.journey[i].SubType == "Complete" then
-                    recentEvents[i]:SetText( timestamp .. Questie:Colorize( QuestieLocale:GetUIString('JOURNEY_QUEST_COMPLETE', qName) , 'yellow')  );
+                    recentEvents[i]:SetText( timestamp .. Questie:Colorize( string.format(L['JOURNEY_QUEST_COMPLETE'], qName) , 'yellow')  );
                 end
             end
         elseif Questie.db.char.journey[i].Event == "Level" then
-            local level = Questie:Colorize(QuestieLocale:GetUIString('JOURNEY_LEVELNUM', Questie.db.char.journey[i].NewLevel), 'gray');
-            recentEvents[i]:SetText( timestamp .. Questie:Colorize( QuestieLocale:GetUIString('JOURNEY_LEVELUP', level) , 'yellow')  );
+            local level = Questie:Colorize(string.format(L['JOURNEY_LEVELNUM'], Questie.db.char.journey[i].NewLevel), 'gray');
+            recentEvents[i]:SetText( timestamp .. Questie:Colorize( string.format(L['JOURNEY_LEVELUP'], level) , 'yellow')  );
         elseif Questie.db.char.journey[i].Event == "Note" then
             local title = Questie:Colorize(Questie.db.char.journey[i].Title, 'gray');
-            recentEvents[i]:SetText( timestamp .. Questie:Colorize( QuestieLocale:GetUIString('JOURNEY_NOTE_CREATED', title) , 'yellow')  );
+            recentEvents[i]:SetText( timestamp .. Questie:Colorize( string.format(L['JOURNEY_NOTE_CREATED'], title) , 'yellow')  );
         end
 
         container:AddChild(recentEvents[i]);
@@ -300,19 +301,19 @@ local function DrawJourneyTab(container)
     if counter == 0 then
         local justdoit = AceGUI:Create("Label");
         justdoit:SetFullWidth(true);
-        justdoit:SetText(Questie:Colorize(QuestieLocale:GetUIString('JOURNEY_BEGIN'), 'yellow'));
+        justdoit:SetText(Questie:Colorize(L['JOURNEY_BEGIN'], 'yellow'));
         container:AddChild(justdoit);
     end
 
     Spacer(container);
 
     local treeHead = AceGUI:Create("Heading");
-    treeHead:SetText(QuestieLocale:GetUIString('JOURNEY_TITLE', UnitName("player")));
+    treeHead:SetText(string.format(L['JOURNEY_TITLE'], UnitName("player")));
     treeHead:SetFullWidth(true);
     container:AddChild(treeHead);
 
     local noteBtn = AceGUI:Create("Button");
-    noteBtn:SetText(QuestieLocale:GetUIString('JOURNEY_NOTE_BTN'));
+    noteBtn:SetText(L['JOURNEY_NOTE_BTN']);
     noteBtn:SetPoint("RIGHT");
     noteBtn:SetCallback("OnClick", notePopup);
     container:AddChild(noteBtn);
@@ -337,7 +338,7 @@ function notePopup()
     if not notesPopupWin then
         notesPopupWin = AceGUI:Create("Window");
         notesPopupWin:Show();
-        notesPopupWin:SetTitle(QuestieLocale:GetUIString('JOURNEY_NOTE_BTN'));
+        notesPopupWin:SetTitle(L['JOURNEY_NOTE_BTN']);
         notesPopupWin:SetWidth(400);
         notesPopupWin:SetHeight(400);
         notesPopupWin:EnableResize(false);
@@ -364,11 +365,11 @@ function notePopup()
         frame:SetFullHeight(true);
         frame:SetFullWidth(true);
         frame:SetLayout('flow');
-        frame:SetTitle(QuestieLocale:GetUIString('JOURNEY_NOTE_TITLE', today));
+        frame:SetTitle(string.format(L['JOURNEY_NOTE_TITLE'], today));
         notesPopupWin:AddChild(frame);
 
         local desc = AceGUI:Create("Label");
-        desc:SetText( Questie:Colorize(QuestieLocale:GetUIString('JOURNEY_NOTE_DESC'), 'yellow')  );
+        desc:SetText( Questie:Colorize(L['JOURNEY_NOTE_DESC'], 'yellow')  );
         desc:SetFullWidth(true);
         frame:AddChild(desc);
 
@@ -377,7 +378,7 @@ function notePopup()
 
         local titleBox = AceGUI:Create("EditBox");
         titleBox:SetFullWidth(true);
-        titleBox:SetLabel(QuestieLocale:GetUIString('JOURNEY_NOTE_ENTRY_TITLE'));
+        titleBox:SetLabel(L['JOURNEY_NOTE_ENTRY_TITLE']);
         titleBox:DisableButton(true);
         titleBox:SetFocus();
         frame:AddChild(titleBox);
@@ -385,19 +386,19 @@ function notePopup()
         local messageBox = AceGUI:Create("MultiLineEditBox");
         messageBox:SetFullWidth(true);
         messageBox:SetNumLines(12);
-        messageBox:SetLabel(QuestieLocale:GetUIString('JOUNREY_NOTE_ENTRY_BODY'));
+        messageBox:SetLabel(L['JOUNREY_NOTE_ENTRY_BODY']);
         messageBox:DisableButton(true);
         frame:AddChild(messageBox);
 
         local addEntryBtn = AceGUI:Create("Button");
-        addEntryBtn:SetText(QuestieLocale:GetUIString('JOURNEY_NOTE_SUBMIT_BTN'));
+        addEntryBtn:SetText(L['JOURNEY_NOTE_SUBMIT_BTN']);
         addEntryBtn:SetCallback("OnClick", function()
             local err = Questie:Colorize('[Questie] ', 'blue');
             if titleBox:GetText() == '' then
-                print (err .. QuestieLocale:GetUIString('JOURNEY_ERR_NOTITLE'));
+                print (err .. L['JOURNEY_ERR_NOTITLE']);
                 return;
             elseif messageBox:GetText() == '' then
-                print (err .. QuestieLocale:GetUIString('JOURNEY_ERR_NONOTE'));
+                print (err .. L['JOURNEY_ERR_NONOTE']);
                 return;
             end
 
@@ -573,7 +574,7 @@ function createObjectiveText(desc)
             objText = objText .. tostring(desc) .. "\n"
         end
     else
-        objText = Questie:Colorize(QuestieLocale:GetUIString('JOURNEY_AUTO_QUEST'), 'yellow');
+        objText = Questie:Colorize(L['JOURNEY_AUTO_QUEST'], 'yellow');
     end
 
     return objText;
@@ -629,7 +630,7 @@ local function npcFrame(f, npc)
         local startGroup = AceGUI:Create("InlineGroup");
         startGroup:SetFullWidth(true);
         startGroup:SetLayout("flow");
-        startGroup:SetTitle(QuestieLocale:GetUIString('JOURNEY_ALSO_STARTS'));
+        startGroup:SetTitle(L['JOURNEY_ALSO_STARTS']);
         f:AddChild(startGroup);
 
         local startQuests = {};
@@ -650,7 +651,7 @@ local function npcFrame(f, npc)
 
         if #startQuests == 0 then
             local noquest = AceGUI:Create("Label");
-            noquest:SetText(QuestieLocale:GetUIString('JOURNEY_NO_QUEST'));
+            noquest:SetText(L['JOURNEY_NO_QUEST']);
             noquest:SetFullWidth(true);
             startGroup:AddChild(noquest);
         end
@@ -664,7 +665,7 @@ local function npcFrame(f, npc)
         local endGroup = AceGUI:Create("InlineGroup");
         endGroup:SetFullWidth(true);
         endGroup:SetLayout("flow");
-        endGroup:SetTitle(QuestieLocale:GetUIString('JOURNEY_ALSO_ENDS'));
+        endGroup:SetTitle(L['JOURNEY_ALSO_ENDS']);
         f:AddChild(endGroup);
 
         local endQuests = {};
@@ -685,7 +686,7 @@ local function npcFrame(f, npc)
 
         if #endQuests == 0 then
             local noquest = AceGUI:Create("Label");
-            noquest:SetText(QuestieLocale:GetUIString('JOURNEY_NO_QUEST'));
+            noquest:SetText(L['JOURNEY_NO_QUEST']);
             noquest:SetFullWidth(true);
             endGroup:AddChild(noquest);
         end
@@ -716,17 +717,17 @@ local function questFrame(f, quest)
 
     local questinfo = AceGUI:Create("Heading");
     questinfo:SetFullWidth(true);
-    questinfo:SetText(QuestieLocale:GetUIString('JOURNEY_QUESTINFO'));
+    questinfo:SetText(L['JOURNEY_QUESTINFO']);
     f:AddChild(questinfo);
 
     -- Generic Quest Information
     local level = AceGUI:Create("Label");
-    level:SetText(Questie:Colorize(QuestieLocale:GetUIString('JOURNEY_QUEST_LEVEL'), 'yellow') .. quest.Level);
+    level:SetText(Questie:Colorize(L['JOURNEY_QUEST_LEVEL'], 'yellow') .. quest.Level);
     level:SetFullWidth(true);
     f:AddChild(level);
 
     local minLevel = AceGUI:Create("Label");
-    minLevel:SetText(Questie:Colorize(QuestieLocale:GetUIString('JOURNEY_QUEST_MINLEVEL'), 'yellow') .. quest.MinLevel);
+    minLevel:SetText(Questie:Colorize(L['JOURNEY_QUEST_MINLEVEL'], 'yellow') .. quest.MinLevel);
     minLevel:SetFullWidth(true);
     f:AddChild(minLevel);
 
@@ -747,11 +748,11 @@ local function questFrame(f, quest)
     diffStr = diffStr .. "|cFF40C040[".. green .."]|r ";
     diffStr = diffStr .. "|cFFC0C0C0[".. gray .."]|r ";
 
-    diff:SetText(Questie:Colorize(QuestieLocale:GetUIString('JOURNEY_DIFFICULTY', diffStr), 'yellow'));
+    diff:SetText(Questie:Colorize(string.format(L['JOURNEY_DIFFICULTY'], diffStr), 'yellow'));
     f:AddChild(diff);
 
     local id = AceGUI:Create("Label");
-    id:SetText(Questie:Colorize(QuestieLocale:GetUIString('JOURNEY_QUEST_ID'), 'yellow') .. quest.Id);
+    id:SetText(Questie:Colorize(L['JOURNEY_QUEST_ID'], 'yellow') .. quest.Id);
     id:SetFullWidth(true);
     f:AddChild(id);
     Spacer(f);
@@ -762,7 +763,7 @@ local function questFrame(f, quest)
     if quest.Starts and quest.Starts.NPC then
         local startNPCGroup = AceGUI:Create("InlineGroup");
         startNPCGroup:SetLayout("List");
-        startNPCGroup:SetTitle(QuestieLocale:GetUIString('JOURNEY_START_NPC'));
+        startNPCGroup:SetTitle(L['JOURNEY_START_NPC']);
         startNPCGroup:SetFullWidth(true);
         f:AddChild(startNPCGroup);
 
@@ -814,7 +815,7 @@ local function questFrame(f, quest)
         if startnpc.Starts then
 
             local alsostarts = AceGUI:Create("Label");
-            alsostarts:SetText(QuestieLocale:GetUIString('JOURNEY_ALSO_STARTS'));
+            alsostarts:SetText(L['JOURNEY_ALSO_STARTS']);
             alsostarts:SetColor(255, 165, 0);
             alsostarts:SetFontObject(GameFontHighlight);
             alsostarts:SetFullWidth(true);
@@ -840,7 +841,7 @@ local function questFrame(f, quest)
 
             if #startQuests == 0 then
                 local noquest = AceGUI:Create("Label");
-                noquest:SetText(QuestieLocale:GetUIString('JOURNEY_NO_QUEST'));
+                noquest:SetText(L['JOURNEY_NO_QUEST']);
                 noquest:SetFullWidth(true);
                 startNPCGroup:AddChild(noquest);
             end
@@ -854,7 +855,7 @@ local function questFrame(f, quest)
     if quest.Starts and quest.Starts.GameObject then
         local startGOGroup = AceGUI:Create("InlineGroup");
         startGOGroup:SetLayout("List");
-        startGOGroup:SetTitle(QuestieLocale:GetUIString('JOURNEY_START_OBJ'));
+        startGOGroup:SetTitle(L['JOURNEY_START_OBJ']);
         startGOGroup:SetFullWidth(true);
         f:AddChild(startGOGroup);
 
@@ -908,7 +909,7 @@ local function questFrame(f, quest)
             if startobj.Starts then
 
                 local alsostarts = AceGUI:Create("Label");
-                alsostarts:SetText(QuestieLocale:GetUIString('JOURNEY_ALSO_STARTS_GO'));
+                alsostarts:SetText(L['JOURNEY_ALSO_STARTS_GO']);
                 alsostarts:SetColor(255, 165, 0);
                 alsostarts:SetFontObject(GameFontHighlight);
                 alsostarts:SetFullWidth(true);
@@ -934,7 +935,7 @@ local function questFrame(f, quest)
 
                 if #startQuests == 0 then
                     local noquest = AceGUI:Create("Label");
-                    noquest:SetText(QuestieLocale:GetUIString('JOURNEY_NO_QUEST'));
+                    noquest:SetText(L['JOURNEY_NO_QUEST']);
                     noquest:SetFullWidth(true);
                     startGOGroup:AddChild(noquest);
                 end
@@ -950,7 +951,7 @@ local function questFrame(f, quest)
     if quest.Finisher and quest.Finisher.Name and quest.Finisher.Type == "monster" then
         local endNPCGroup = AceGUI:Create("InlineGroup");
         endNPCGroup:SetLayout("Flow");
-        endNPCGroup:SetTitle(QuestieLocale:GetUIString('JOURNEY_END_NPC'));
+        endNPCGroup:SetTitle(L['JOURNEY_END_NPC']);
         endNPCGroup:SetFullWidth(true);
         f:AddChild(endNPCGroup);
         Spacer(endNPCGroup);
@@ -1000,7 +1001,7 @@ local function questFrame(f, quest)
         -- Also ends
         if endnpc.Ends then
             local alsoends = AceGUI:Create("Label");
-            alsoends:SetText(QuestieLocale:GetUIString('JOURNEY_ALSO_ENDS'));
+            alsoends:SetText(L['JOURNEY_ALSO_ENDS']);
             alsoends:SetFontObject(GameFontHighlight);
             alsoends:SetColor(255, 165, 0);
             alsoends:SetFullWidth(true);
@@ -1026,7 +1027,7 @@ local function questFrame(f, quest)
 
             if #endQuests == 0 then
                 local noquest = AceGUI:Create("Label");
-                noquest:SetText(QuestieLocale:GetUIString('JOURNEY_NO_QUEST'));
+                noquest:SetText(L['JOURNEY_NO_QUEST']);
                 noquest:SetFullWidth(true);
                 endNPCGroup:AddChild(noquest);
             end
@@ -1094,7 +1095,7 @@ end
 local function DrawZoneQuestTab(container)
     -- Header
     local header = AceGUI:Create("Heading");
-    header:SetText(QuestieLocale:GetUIString('JOURNEY_SELECT_HEAD'));
+    header:SetText(L['JOURNEY_SELECT_HEAD']);
     header:SetFullWidth(true);
     container:AddChild(header);
     Spacer(container);
@@ -1105,19 +1106,19 @@ local function DrawZoneQuestTab(container)
     local treegroup = AceGUI:Create("SimpleGroup");
 
     CDropdown:SetList(continentTable);
-    CDropdown:SetText(QuestieLocale:GetUIString('JOURNEY_SELECT_CONT'));
+    CDropdown:SetText(L['JOURNEY_SELECT_CONT']);
 
     CDropdown:SetCallback("OnValueChanged", function(key, checked)
         -- set the zone table to be used.
         selectedContinent = key.value;
         zDropdown:SetList(zoneTable[key.value]);
-        zDropdown:SetText(QuestieLocale:GetUIString('JOURNEY_SELECT_ZONE'));
+        zDropdown:SetText(L['JOURNEY_SELECT_ZONE']);
         zDropdown:SetDisabled(false);
     end)
     container:AddChild(CDropdown);
 
     -- Dropdown for Zone
-    zDropdown:SetText(QuestieLocale:GetUIString('JOURNEY_SELECT_ZONE'));
+    zDropdown:SetText(L['JOURNEY_SELECT_ZONE']);
     zDropdown:SetDisabled(true);
 
     zDropdown:SetCallback("OnValueChanged", function(key, checked)
@@ -1129,7 +1130,7 @@ local function DrawZoneQuestTab(container)
     Spacer(container);
 
     header = AceGUI:Create("Heading");
-    header:SetText(QuestieLocale:GetUIString('JOURNEY_QUESTS'));
+    header:SetText(L['JOURNEY_QUESTS']);
     header:SetFullWidth(true);
     container:AddChild(header);
 
@@ -1150,12 +1151,12 @@ function CollectZoneQuests(container, zoneid)
     local zoneTree = {
         [1] = {
             value = "a",
-            text = QuestieLocale:GetUIString('JOURNEY_AVAILABLE_TITLE'),
+            text = L['JOURNEY_AVAILABLE_TITLE'],
             children = {}
         },
         [2] = {
             value = "c",
-            text = QuestieLocale:GetUIString('JOURNEY_COMPLETE_TITLE'),
+            text = L['JOURNEY_COMPLETE_TITLE'],
             children = {}
         }
     };
@@ -1232,7 +1233,7 @@ function DrawSearchResultTab(searchGroup, searchType, query)
         end
         if (resultCountTotal == 0) then
             local noresults = AceGUI:Create("Label");
-            noresults:SetText(Questie:Colorize(QuestieLocale:GetUIString('JOURNEY_SEARCH_NOMATCH', query), 'yellow'));
+            noresults:SetText(Questie:Colorize(string.format(L['JOURNEY_SEARCH_NOMATCH'], query), 'yellow'));
             noresults:SetFullWidth(true);
             searchGroup:AddChild(noresults);
             return;
@@ -1276,7 +1277,7 @@ local searchGroup = nil;
 local function DrawSearchTab(container)
     -- Header
     local header = AceGUI:Create("Heading");
-    header:SetText(QuestieLocale:GetUIString('JOURNEY_SEARCH_HEAD'));
+    header:SetText(L['JOURNEY_SEARCH_HEAD']);
     header:SetFullWidth(true);
     container:AddChild(header);
     Spacer(container);
@@ -1287,8 +1288,8 @@ local function DrawSearchTab(container)
     local searchBtn = AceGUI:Create("Button");
     -- switching between search types
     typeDropdown:SetList({
-        [1] = QuestieLocale:GetUIString('JOURNEY_SEARCH_BY_NAME'),
-        [2] = QuestieLocale:GetUIString('JOURNEY_SEARCH_BY_ID'),
+        [1] = L['JOURNEY_SEARCH_BY_NAME'],
+        [2] = L['JOURNEY_SEARCH_BY_ID'],
     });
     typeDropdown:SetValue(Questie.db.char.searchType);
     typeDropdown:SetCallback("OnValueChanged", function(key, checked)
@@ -1301,7 +1302,7 @@ local function DrawSearchTab(container)
     -- search input field
     searchBox:SetFocus();
     searchBox:SetRelativeWidth(0.6);
-    searchBox:SetLabel(QuestieLocale:GetUIString('JOURNEY_SEARCH_TAB'));
+    searchBox:SetLabel(L['JOURNEY_SEARCH_TAB']);
     searchBox:DisableButton(true);
     searchBox:SetCallback("OnTextChanged", function()
         if not (searchBox:GetText() == '') then
@@ -1318,7 +1319,7 @@ local function DrawSearchTab(container)
     end);
     container:AddChild(searchBox);
     -- search button
-    searchBtn:SetText(QuestieLocale:GetUIString('JOURNEY_SEARCH_EXE'));
+    searchBtn:SetText(L['JOURNEY_SEARCH_EXE']);
     searchBtn:SetDisabled(true);
     searchBtn:SetCallback("OnClick", function()
         local text = string.trim(searchBox:GetText(), " \n\r\t[]");
@@ -1575,22 +1576,22 @@ function QuestieJourney:Initialize()
 
     journeyFrame.frame = AceGUI:Create("Frame");
 
-    journeyFrame.frame:SetTitle(QuestieLocale:GetUIString('JOURNEY_TITLE', UnitName("player")));
+    journeyFrame.frame:SetTitle(string.format(L['JOURNEY_TITLE'], UnitName("player")));
     journeyFrame.frame:SetLayout("Fill");
 
     tabGroup = AceGUI:Create("TabGroup")
     tabGroup:SetLayout("Flow");
     tabGroup:SetTabs({
         {
-            text = QuestieLocale:GetUIString('JOUNREY_TAB'),
+            text = L['JOUNREY_TAB'],
             value="journey"
         },
         {
-            text = QuestieLocale:GetUIString('JOURNEY_ZONE_TAB'),
+            text = L['JOURNEY_ZONE_TAB'],
             value="zone"
         },
         {
-            text = QuestieLocale:GetUIString('JOURNEY_SEARCH_TAB'),
+            text = L['JOURNEY_SEARCH_TAB'],
             value="search"
         }
     });
