@@ -38,36 +38,36 @@ for i = 1, 35 do
 
                 --No need to run this unless we have to.
                 if(Questie.db.global.debugEnabled) then
-                    Questie:Debug(DEBUG_DEVELOP, event, "Updating index", self.questLogIndex, "Title:", QuestInfo.title, "Id:", QuestInfo.Id)
+                    Questie:Debug(DEBUG_DEVELOP, event, "Updating index", self.questLogIndex, "Title:", QuestInfo.title, "Id:", QuestInfo.id)
                     for index, objective in pairs(QuestInfo.Objectives) do
                         Questie:Debug(DEBUG_DEVELOP, "-------->", objective.description);
                     end
                 end
                 --Update the quest
                 C_Timer.After(1, function ()
-                    QuestieQuest:UpdateQuest(QuestInfo.Id)
+                    QuestieQuest:UpdateQuest(QuestInfo.id)
                 end)
-                --QuestieQuest:UpdateQuest(QuestInfo.Id);
+                --QuestieQuest:UpdateQuest(QuestInfo.id);
                 self.refresh = false;
             end
             if(self.accept) then
                 local QuestInfo = QuestieQuest:GetRawLeaderBoardDetails(self.questLogIndex)
-                Questie:Debug(DEBUG_DEVELOP, event, "Accepted quest", self.questLogIndex, "Title:", QuestInfo.title, "Id:", QuestInfo.Id)
+                Questie:Debug(DEBUG_DEVELOP, event, "Accepted quest", self.questLogIndex, "Title:", QuestInfo.title, "Id:", QuestInfo.id)
 
                 --Accept the quest.
-                QuestieQuest:AcceptQuest(QuestInfo.Id)
+                QuestieQuest:AcceptQuest(QuestInfo.id)
                 --Delay the update by 1 second to let everything propagate, should not be needed...
                 C_Timer.After(1, function ()
-                    Questie:Debug(DEBUG_DEVELOP, event, "Updated quest", self.questLogIndex, "Title:", QuestInfo.title, "Id:", QuestInfo.Id)
-                    QuestieQuest:UpdateQuest(QuestInfo.Id)
+                    Questie:Debug(DEBUG_DEVELOP, event, "Updated quest", self.questLogIndex, "Title:", QuestInfo.title, "Id:", QuestInfo.id)
+                    QuestieQuest:UpdateQuest(QuestInfo.id)
                 end)
-                
+
                 -- deferred update (possible desync fix)
                 C_Timer.After(3, function()
-                    QuestieQuest:PopulateObjectiveNotes(QuestieDB:GetQuest(QuestInfo.Id))
-                    QuestieQuest:UpdateQuest(QuestInfo.Id)
+                    QuestieQuest:PopulateObjectiveNotes(QuestieDB:GetQuest(QuestInfo.id))
+                    QuestieQuest:UpdateQuest(QuestInfo.id)
                 end)
-                
+
                 self.accept = false;
             end
         end
@@ -167,7 +167,7 @@ function QuestieEventHandler:QUEST_ACCEPTED(QuestLogIndex, QuestId)
             table.insert(data.Party, p);
         end
     end
-    
+
     table.insert(Questie.db.char.journey, data);
 
 end
@@ -211,10 +211,10 @@ function QuestieEventHandler:QUEST_REMOVED(QuestId)
                 table.insert(data.Party, p);
             end
         end
-        
+
         table.insert(Questie.db.char.journey, data);
     end
-    
+
     -- deferred update (possible desync fix?)
     --C_Timer.After(3, function()
     --    QuestieQuest:GetAllQuestIdsNoObjectives();
@@ -228,7 +228,7 @@ function QuestieEventHandler:QUEST_TURNED_IN(questID, xpReward, moneyReward)
     _hack_prime_log()
     Questie:Debug(DEBUG_DEVELOP, "EVENT: QUEST_TURNED_IN", questID, xpReward, moneyReward);
     QuestieQuest:CompleteQuest(questID)
-    
+
     -- deferred update (possible desync fix?)
     --C_Timer.After(3, function()
     --    QuestieQuest:GetAllQuestIdsNoObjectives()
@@ -254,7 +254,7 @@ function QuestieEventHandler:QUEST_TURNED_IN(questID, xpReward, moneyReward)
             table.insert(data.Party, p);
         end
     end
-        
+
     table.insert(Questie.db.char.journey, data);
 end
 
@@ -314,14 +314,14 @@ function QuestieEventHandler:QUEST_WATCH_UPDATE(QuestLogIndex)
     C_Timer.After(1, function() -- start repeating after 1 sec, first update was incorrectly being detected as a change because this bug is super annoying
             QuestWatchTimers.repeatTimer = Questie:ScheduleRepeatingTimer(function()
             local QuestInfo = QuestieQuest:GetRawLeaderBoardDetails(_QuestLogIndexFinal)
-            if(lastState[QuestInfo.Id] == nil or lastState[QuestInfo.Id].compareString ~= QuestInfo.compareString) then
+            if(lastState[QuestInfo.id] == nil or lastState[QuestInfo.id].compareString ~= QuestInfo.compareString) then
                 Questie:Debug(DEBUG_DEVELOP, "[QuestieEventHandler] QUEST_WATCH_UPDATE found a change!")
-                lastState[QuestInfo.Id] = QuestInfo;
+                lastState[QuestInfo.id] = QuestInfo;
                 Questie:CancelTimer(QuestWatchTimers.repeatTimer)
                 Questie:CancelTimer(QuestWatchTimers.cancelTimer)
                 QuestWatchTimers.cancelTimer = nil;
                 QuestWatchTimers.repeatTimer = nil;
-                QuestieQuest:UpdateQuest(QuestInfo.Id);
+                QuestieQuest:UpdateQuest(QuestInfo.id);
             end
         end, 1)
     end)]]--
@@ -338,14 +338,14 @@ end
 
 function QuestieEventHandler:PLAYER_LEVEL_UP(level, hitpoints, manapoints, talentpoints, ...)
     Questie:Debug(DEBUG_DEVELOP, "EVENT: PLAYER_LEVEL_UP", level);
-    
+
     qPlayerLevel = level;
     --QuestieQuest:CalculateAvailableQuests();
     --QuestieQuest:DrawAllAvailableQuests();
-    
+
     -- deferred update (possible desync fix?)
-    C_Timer.After(3, function() 
-        qPlayerLevel = UnitLevel("player") 
+    C_Timer.After(3, function()
+        qPlayerLevel = UnitLevel("player")
         QuestieQuest:CalculateAvailableQuests();
         QuestieQuest:DrawAllAvailableQuests();
     end)
@@ -366,8 +366,8 @@ function QuestieEventHandler:PLAYER_LEVEL_UP(level, hitpoints, manapoints, talen
             p.Level = UnitLevel(v);
             table.insert(data.Party, p);
         end
-    end 
-    
+    end
+
     table.insert(Questie.db.char.journey, data);
 end
 
