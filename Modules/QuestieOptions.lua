@@ -157,6 +157,7 @@ _QuestieOptions.defaults = {
       dbmHUDShowSlay = false,
       dbmHUDShowLoot = false,
       dbmHUDShowInteract = true,
+      dbmHUDShowManual = false,
       mapShowHideEnabled = true,
       nameplateTargetFrameEnabled = false,
       nameplateTargetFrameX = -30,
@@ -907,6 +908,18 @@ _QuestieOptions.optionsGUI = {
                     order = 23,
                     name = function() return QuestieLocale:GetUIString('DBM_HUD_FILTER_INTERACT') end,
                     desc = function() return QuestieLocale:GetUIString('DBM_HUD_FILTER_INTERACT_DESC', _QuestieOptions.defaults.global.dbmHUDShowInteract) end,
+                    width = "full",
+                    get = GetGlobalOptionLocal,
+                    set = function (info, value)
+                        SetGlobalOptionLocal(info, value)
+                        QuestieDBMIntegration:SoftReset()
+                    end,
+                },
+                dbmHUDShowManual = {
+                    type = "toggle",
+                    order = 24,
+                    name = function() return QuestieLocale:GetUIString('DBM_HUD_FILTER_MANUAL') end,
+                    desc = function() return QuestieLocale:GetUIString('DBM_HUD_FILTER_MANUAL_DESC', _QuestieOptions.defaults.global.dbmHUDShowManual) end,
                     width = "full",
                     get = GetGlobalOptionLocal,
                     set = function (info, value)

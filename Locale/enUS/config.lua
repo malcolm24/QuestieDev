@@ -97,6 +97,8 @@ QuestieLocale.locale['enUS'] = {
     ['DBM_HUD_FILTER_LOOT_DESC'] = "Toggles whether or not loot icons appear on HUD ( Default: %s )",
     ['DBM_HUD_FILTER_INTERACT'] = "Show quest objective icons",
     ['DBM_HUD_FILTER_INTERACT_DESC'] = "Toggles whether or not objective icons appear on HUD ( Default: %s )",
+    ['DBM_HUD_FILTER_MANUAL'] = "Show manual icons",
+    ['DBM_HUD_FILTER_MANUAL_DESC'] = "Toggles whether or not manual icons appear on HUD ( Default: %s )",
 
     ['NAMEPLATE_TAB'] = "Nameplates",
     ['NAMEPLATE_HEAD'] = "Nameplate Icon Options",

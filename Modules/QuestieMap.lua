@@ -289,6 +289,9 @@ function QuestieMap:DrawManualIcon(data, AreaID, x, y)
     -- add the map icon
     QuestieMap:QueueDraw(QuestieMap.ICON_MAP_TYPE, Questie, icon, data.UiMapID, x/100, y/100, 3) -- showFlag)
     table.insert(QuestieMap.manualFrames[data.id], icon:GetName())
+    -- add to DBM HUD
+    local colors = {1, 1, 1}
+    QuestieDBMIntegration:RegisterHudQuestIcon(tostring(icon), data.Icon, zoneDataAreaIDToUiMapID[AreaID], x, y, colors[1], colors[2], colors[3])
 
     -- create the minimap icon
     local iconMinimap = QuestieFramePool:GetFrame()
