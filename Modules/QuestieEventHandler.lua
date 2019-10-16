@@ -68,13 +68,14 @@ function QuestieEventHandler:QUEST_REMOVED(questID)
     _Hack_prime_log()
     if finishedEventReceived == questID then
         finishedEventReceived = false
-        runQLU = true
+        runQLU = false
         QuestieQuest:CompleteQuest(questID)
         QuestieJourney:CompleteQuest(questID)
         return
     end
     QuestieQuest:AbandonedQuest(questID)
     QuestieJourney:AbandonQuest(questID)
+    runQLU = false
 end
 
 -- Fires when a quest is turned in, but before it is remove from the quest log.
