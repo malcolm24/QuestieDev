@@ -1202,6 +1202,7 @@ function QuestieQuest:CompareQuestHashes()
     end
     ExpandQuestHeader(0) -- Expand all headers
 
+    local foundUpdate = false
     local numEntries, _ = GetNumQuestLogEntries()
     for questLogIndex=1, numEntries do
         local _, _, _, isHeader, isCollapsed, isComplete, _, questId = GetQuestLogTitle(questLogIndex)
@@ -1217,11 +1218,17 @@ function QuestieQuest:CompareQuestHashes()
                 if oldhash ~= newHash then
                     Questie:Debug(DEBUG_DEVELOP, "CompareQuestHashes: Hash changed for questId:", questId)
                     QuestieQuest:UpdateQuest(questId)
+                    foundUpdate = true
                     _QuestieQuest.questLogHashes[questId] = newHash
                 end
+            else
+                -- oldhash = nil means a quest has been accepted
+                foundUpdate = true
             end
         end
     end
+    Questie:Debug(DEBUG_DEVELOP, "FUNCTION: QuestieQuest:CompareQuestHashes", "foundUpdate: "..tostring(foundUpdate));
+    return not foundUpdate
 end
 
 --https://www.townlong-yak.com/framexml/live/Blizzard_APIDocumentation#C_QuestLog.GetQuestObjectives

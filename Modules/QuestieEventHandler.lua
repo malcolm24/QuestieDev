@@ -38,13 +38,14 @@ function QuestieEventHandler:PLAYER_LOGIN()
     end)
 end
 
---Fires when a quest is accepted in anyway.
+-- Needed to update accepted quests on QLU event instead of immediately.
+local lastAcceptedQuestID = nil
+-- Fires when a quest is accepted in anyway.
 function QuestieEventHandler:QUEST_ACCEPTED(questLogIndex, questId)
     Questie:Debug(DEBUG_DEVELOP, "EVENT: QUEST_ACCEPTED", "QLogIndex: "..questLogIndex,  "QuestID: "..questId);
     _Hack_prime_log()
 
-    QuestieQuest:AcceptQuest(questId)
-    QuestieJourney:AcceptQuest(questId)
+    lastAcceptedQuestID = questId
 end
 
 --Fires on MAP_EXPLORATION_UPDATED.
@@ -102,8 +103,13 @@ function QuestieEventHandler:QUEST_LOG_UPDATE()
 
     -- QR or UQLC events have set the flag, so we need to update Questie state.
     if runQLU then
-        QuestieQuest:CompareQuestHashes()
-        runQLU = false
+        runQLU = QuestieQuest:CompareQuestHashes()
+        if lastAcceptedQuestID and not runQLU then
+            Questie:Debug(DEBUG_DEVELOP, "EVENT: QUEST_LOG_UPDATE", "lastAcceptedQuestID: "..lastAcceptedQuestID);
+            QuestieQuest:AcceptQuest(lastAcceptedQuestID)
+            QuestieJourney:AcceptQuest(lastAcceptedQuestID)
+            lastAcceptedQuestID = nil
+        end
     end
 end
 
